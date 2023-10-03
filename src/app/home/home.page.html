@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      CONVERTER
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+ 
+
+  <div id="container">
+
+    <ion-item>
+      Base Currrency: USD (United State Dollar)
+    </ion-item>
+    <ion-icon name="arrow-round-down"></ion-icon><ion-icon name="arrow-round-up"></ion-icon>
+    <ion-item>
+      <ion-select label=" Currency"  (ionChange)="selectCurrency($event)" >
+        <ion-select-option > --select Currency-- </ion-select-option>
+        <ion-select-option *ngFor="let currency of currencies" [value]="currency.code"> {{ currency.name }} ({{ currency.code }}) - {{ currency.symbol }} </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button color="primary" (click)="getLatestRate()" >Convert</ion-button>
+
+    <br><br>
+    <ion-item class="filtered" *ngIf="filteredRate" lines="none" color="success" >
+      <p>1 USD is currently: {{filteredRate}} {{this.currency}} </p>
+    </ion-item>
+
+    
+
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label> Transaction History</ion-label>
+        </ion-item-divider>
+    
+        <ion-item>
+          <ion-label>A1</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>A2</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>A3</ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </div>
+</ion-content>

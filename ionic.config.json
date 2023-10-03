@@ -1,0 +1,7 @@
+{
+  "name": "curr-converter",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
