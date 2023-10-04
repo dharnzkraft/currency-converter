@@ -4,6 +4,7 @@ import { ConversionService } from '../services/conversion.service';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 import { Observable } from 'rxjs';
 import { formatDate } from '@angular/common';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-home',
@@ -19,13 +20,15 @@ export class HomePage {
   public current_date=new Date();
   dayDate: string;
   filteredRate: number | undefined ;
+  items: any[] = [];
 
   constructor(
-    private convService: ConversionService
+    private convService: ConversionService,
+    private storage: StorageMap
   ) {
     this.getCurrencies();
     this.dayDate = formatDate(this.current_date,'yyyy-MM-dd',"en-US");
-    this.getHistory()
+    this.getHistory();
   }
 
   getCurrencies(): Observable<any> {
@@ -53,18 +56,30 @@ export class HomePage {
       console.log(response);
       this.latestResp = response.data;
       this.filteredRate = this.latestResp[this.currency];
-      console.log(this.filteredRate);
-      localStorage.setItem(this.currency, JSON.stringify(this.filteredRate))
+      // console.log(this.filteredRate);
+      this.storeTransaction()
       
     },(error: any)=>{
       console.log(error)
     })
   }
 
+  storeTransaction(){
+    let transactionData  = {};
+
+    let existingArray: any[] = JSON.parse(localStorage.getItem('myArray') || '[]');
+
+    const objectToAdd = { currency: this.currency, rate: this.filteredRate };
+    existingArray.push(objectToAdd);
+
+    localStorage.setItem('myArray', JSON.stringify(existingArray));
+    this.getHistory()
+  }
+
 
   getHistory(){
-    this.convService.getHistoricalExchanges(2021-12-31, this.dayDate).then((response: any)=>{
-      console.log(response)
-    })
+    let existingArray: any[] = JSON.parse(localStorage.getItem('myArray') || '[]');
+    this.items = existingArray.reverse();
+    console.log(this.items)
   }
 }
